@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-lang-key="title"></title>
+    <link rel="stylesheet" href="./assets/css/style.css" />
+
+    <style>
+      body {
+        background-image: url("./assets/images/bg-image.png");
+      }
+      .left-container,
+      .right-container {
+        width: 50%;
+        height: 100%;
+        padding-top: 10vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="language-container">
+      <div class="english active">E</div>
+      <div class="hindi">H</div>
+      <div class="gujrati">G</div>
+    </div>
+    <div class="page-title">
+      <div class="title-left">
+        <span class="title-1" data-lang-key="title-1"></span>
+        <span class="and" data-lang-key="and"></span>
+      </div>
+      <div class="title-right">
+        <span class="title-2" data-lang-key="title-2"></span>
+      </div>
+    </div>
+
+    <main>
+      <div class="left-container">
+        <a href="tithi.html" class="tithi-img">
+          <img src="./assets/images/tithi.png" alt="" />
+          <span data-lang-key="title-1"></span>
+        </a>
+      </div>
+      <div class="right-container">
+        <a href="months.html" class="month-img">
+          <img src="./assets/images/month.png" alt="" />
+          <span data-lang-key="title-2"></span>
+        </a>
+      </div>
+    </main>
+    <script src="./assets/js/app.js"></script>
+  </body>
+</html>

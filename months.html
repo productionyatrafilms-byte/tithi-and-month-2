@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-lang-key="title"></title>
+    <link rel="stylesheet" href="./assets/css/style.css" />
+
+    <!-- Swiper CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+
+    <style>
+      body {
+        background-image: url("./assets/images/month-bg-img.png");
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      @keyframes bgSlideIn {
+        from {
+          transform: translateX(-100%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      main {
+        padding-top: 8vw;
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .page-title {
+        position: absolute;
+        top: 2%;
+        left: 50%;
+        height: auto;
+        text-align: center;
+        z-index: 10000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(219, 218, 218, 0.292);
+        backdrop-filter: blur(0.2vw);
+        padding: 1vw;
+        border: 0.1vw solid rgba(255, 255, 255, 0.498);
+        border-radius: 0.4vw;
+        box-shadow: 0.2vw 0.4vw 0.2vw rgba(3, 3, 3, 0.608);
+        transform: translateX(-50%);
+        opacity: 0;
+        margin-top: -8vw;
+        animation: pageTitleEntry 1s ease forwards;
+        animation-delay: 0.2s;
+      }
+
+      .page-title span {
+        color: #9570ff;
+      }
+
+      @keyframes pageTitleEntry {
+        from {
+          opacity: 0;
+          margin-top: -8vw;
+        }
+        to {
+          opacity: 1;
+          margin-top: 0;
+        }
+      }
+
+      .left-container,
+      .right-container,
+      .center-container {
+        width: 33%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 1.5vw;
+      }
+
+      .left-container,
+      .right-container {
+        padding: 0 3vw;
+      }
+
+      .left-container .col,
+      .right-container .col {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5vw;
+      }
+
+      .left-container .col .row,
+      .right-container .col .row {
+        position: relative;
+        width: 100%;
+        height: 10.5vw;
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+        align-items: center;
+        background-image: url("./assets/images/month-swiper-img.png");
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        padding-top: 2.8vw;
+      }
+
+      .left-container .col .row .num,
+      .right-container .col .row .num,
+      .left-container .col .row .text,
+      .right-container .col .row .text {
+        font-size: 1.8vw;
+        line-height: 1.2;
+        color: #9570ff;
+      }
+
+      body[data-lang="hi"] .row .text {
+        font-size: 1.5vw !important;
+        line-height: 1.4 !important;
+      }
+
+      /* Gujarati */
+      body[data-lang="gu"] .row .text,body[data-lang="gu"] .row .num {
+        font-size: 1.5vw !important;
+        font-weight: bold !important;
+        line-height: 1.6 !important;
+      }
+      body[data-lang="gu"] .season-1,
+      body[data-lang="gu"] .season-2,
+      body[data-lang="gu"] .season-3 {
+        font-size: 1.2vw !important;
+        line-height: 1.4 !important;
+        font-weight: bold !important;
+      }
+      .season-1,
+      .season-2,
+      .season-3 {
+        font-size: 1.3vw;
+        line-height: 1.5;
+      }
+
+      .season-1 {
+        color: #597bff;
+      }
+
+      .season-2 {
+        color: #f5b67c;
+      }
+
+      .season-3 {
+        color: #7cb0f5;
+      }
+
+      .center-container {
+        justify-content: center;
+        align-items: center;
+        position: relative;
+      }
+
+      .month-swiper-wrap {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 20;
+      }
+
+      /* Overlay is the stacking container for img + swiper */
+      .month-swiper-overlay {
+        position: relative;
+        width: 100%;
+        height: 28vw;
+      }
+
+      /* Real <img> tag sits as the background layer */
+      .month-swiper-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        z-index: 0;
+        pointer-events: none;
+        display: block;
+      }
+
+      /* Swiper placed on top of the img */
+      .month-swiper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: auto;
+        z-index: 1;
+      }
+
+      .month-swiper .swiper-wrapper {
+        width: 100%;
+        height: 100%;
+      }
+
+      .month-swiper .swiper-slide {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: transparent;
+      }
+
+      .month-slide-content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding-top: 5vw;
+        position: relative;
+        z-index: 2;
+        gap: 1.5vw;
+      }
+
+      .month-slide-content .num,
+      .month-slide-content .text {
+        font-size: 4vw;
+        line-height: 1;
+        color: #9570ff;
+      }
+
+      .month-slide-content .season-1,
+      .month-slide-content .season-2,
+      .month-slide-content .season-3 {
+        font-size: 2vw;
+        line-height: 1.2;
+        margin-top: 0.2vw;
+      }
+
+      .month-swiper-nav {
+        width: 14vw;
+        margin-top: 1.5vw;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        z-index: 50;
+        pointer-events: auto;
+      }
+
+      .month-swiper-prev,
+      .month-swiper-next {
+        width: 5vw;
+        height: 5vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        z-index: 60;
+        pointer-events: auto;
+      }
+
+      .month-swiper-prev:hover,
+      .month-swiper-next:hover {
+        transform: scale(1.1);
+      }
+
+      .month-swiper-prev img,
+      .month-swiper-next img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <a class="home-button home-btn" href="index.html">
+      <img src="./assets/images/home-btn.png" alt="" />
+    </a>
+
+    <div class="page-title">
+      <span class="title-1" data-lang-key="title-2"></span>
+    </div>
+
+    <div class="language-container">
+      <div class="english active">E</div>
+      <div class="hindi">H</div>
+      <div class="gujrati">G</div>
+    </div>
+
+    <main>
+      <div class="left-container">
+        <!-- col-1 -->
+        <div class="col col-1">
+          <div class="row row-1">
+            <div class="num" data-lang-key="num-1"></div>
+            <div class="text" data-lang-key="slide-topic-2.1"></div>
+            <div class="season-1" data-lang-key="season-1"></div>
+          </div>
+          <div class="row row-2">
+            <div class="num" data-lang-key="num-3"></div>
+            <div class="text" data-lang-key="slide-topic-2.1"></div>
+            <div class="season-1" data-lang-key="season-1"></div>
+          </div>
+          <div class="row row-3">
+            <div class="num" data-lang-key="num-5"></div>
+            <div class="text" data-lang-key="slide-topic-2.1"></div>
+            <div class="season-2" data-lang-key="season-2"></div>
+          </div>
+        </div>
+
+        <!-- col-2 -->
+        <div class="col col-2">
+          <div class="row row-1">
+            <div class="num" data-lang-key="num-2"></div>
+            <div class="text" data-lang-key="slide-topic-2.1"></div>
+            <div class="season-1" data-lang-key="season-1"></div>
+          </div>
+          <div class="row row-2">
+            <div class="num" data-lang-key="num-4"></div>
+            <div class="text" data-lang-key="slide-topic-2.1"></div>
+            <div class="season-2" data-lang-key="season-2"></div>
+          </div>
+          <div class="row row-3">
+            <div class="num" data-lang-key="num-6"></div>
+            <div class="text" data-lang-key="slide-topic-2.1"></div>
+            <div class="season-2" data-lang-key="season-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="center-container">
+        <div class="month-swiper-wrap">
+          <div class="month-swiper-overlay">
+            <!-- Card image as a real <img> — sits behind the swiper (z-index: 0) -->
+            <img
+              class="month-swiper-bg"
+              src="./assets/images/month.png"
+              alt=""
+            />
+
+            <!-- Swiper on top of the img (z-index: 1) -->
+            <div class="swiper month-swiper">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                  <div class="month-slide-content">
+                    <div class="num" data-lang-key="num-1"></div>
+                    <div class="text" data-lang-key="slide-topic-2.1"></div>
+                    <div class="season-1" data-lang-key="season-1"></div>
+                  </div>
+                </div>
+
+                <div class="swiper-slide">
+                  <div class="month-slide-content">
+                    <div class="num" data-lang-key="num-2"></div>
+                    <div class="text" data-lang-key="slide-topic-2.1"></div>
+                    <div class="season-1" data-lang-key="season-1"></div>
+                  </div>
+                </div>
+
+                <div class="swiper-slide">
+                  <div class="month-slide-content">
+                    <div class="num" data-lang-key="num-3"></div>
+                    <div class="text" data-lang-key="slide-topic-2.1"></div>
+                    <div class="season-1" data-lang-key="season-1"></div>
+                  </div>
+                </div>
+
+                <div class="swiper-slide">
+                  <div class="month-slide-content">
+                    <div class="num" data-lang-key="num-4"></div>
+                    <div class="text" data-lang-key="slide-topic-2.1"></div>
+                    <div class="season-2" data-lang-key="season-2"></div>
+                  </div>
+                </div>
+
+                <div class="swiper-slide">
+                  <div class="month-slide-content">
+                    <div class="num" data-lang-key="num-5"></div>
+                    <div class="text" data-lang-key="slide-topic-2.1"></div>
+                    <div class="season-2" data-lang-key="season-2"></div>
+                  </div>
+                </div>
+
+                <div class="swiper-slide">
+                  <div class="month-slide-content">
+                    <div class="num" data-lang-key="num-6"></div>
+                    <div class="text" data-lang-key="slide-topic-2.1"></div>
+                    <div class="season-2" data-lang-key="season-2"></div>
+                  </div>
+                </div>
+
+                <div class="swiper-slide">
+                  <div class="month-slide-content">
+                    <div class="num" data-lang-key="num-7"></div>
+                    <div class="text" data-lang-key="slide-topic-2.1"></div>
+                    <div class="season-2" data-lang-key="season-2"></div>
+                  </div>
+                </div>
+
+                <div class="swiper-slide">
+                  <div class="month-slide-content">
+                    <div class="num" data-lang-key="num-8"></div>
+                    <div class="text" data-lang-key="slide-topic-2.1"></div>
+                    <div class="season-2" data-lang-key="season-2"></div>
+                  </div>
+                </div>
+
+                <div class="swiper-slide">
+                  <div class="month-slide-content">
+                    <div class="num" data-lang-key="num-9"></div>
+                    <div class="text" data-lang-key="slide-topic-2.1"></div>
+                    <div class="season-3" data-lang-key="season-3"></div>
+                  </div>
+                </div>
+
+                <div class="swiper-slide">
+                  <div class="month-slide-content">
+                    <div class="num" data-lang-key="num-10"></div>
+                    <div class="text" data-lang-key="slide-topic-2.1"></div>
+                    <div class="season-3" data-lang-key="season-3"></div>
+                  </div>
+                </div>
+
+                <div class="swiper-slide">
+                  <div class="month-slide-content">
+                    <div class="num" data-lang-key="num-11"></div>
+                    <div class="text" data-lang-key="slide-topic-2.1"></div>
+                    <div class="season-3" data-lang-key="season-3"></div>
+                  </div>
+                </div>
+
+                <div class="swiper-slide">
+                  <div class="month-slide-content">
+                    <div class="num" data-lang-key="num-12"></div>
+                    <div class="text" data-lang-key="slide-topic-2.1"></div>
+                    <div class="season-3" data-lang-key="season-3"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="month-swiper-nav">
+            <div class="month-swiper-prev">
+              <img src="./assets/images/prev-btn.png" alt="Previous" />
+            </div>
+            <div class="month-swiper-next">
+              <img src="./assets/images/next-btn.png" alt="Next" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-container">
+        <!-- col-3 -->
+        <div class="col col-3">
+          <div class="row row-1">
+            <div class="num" data-lang-key="num-7"></div>
+            <div class="text" data-lang-key="slide-topic-2.1"></div>
+            <div class="season-2" data-lang-key="season-2"></div>
+          </div>
+          <div class="row row-2">
+            <div class="num" data-lang-key="num-9"></div>
+            <div class="text" data-lang-key="slide-topic-2.1"></div>
+            <div class="season-3" data-lang-key="season-3"></div>
+          </div>
+          <div class="row row-3">
+            <div class="num" data-lang-key="num-11"></div>
+            <div class="text" data-lang-key="slide-topic-2.1"></div>
+            <div class="season-3" data-lang-key="season-3"></div>
+          </div>
+        </div>
+
+        <!-- col-4 -->
+        <div class="col col-4">
+          <div class="row row-1">
+            <div class="num" data-lang-key="num-8"></div>
+            <div class="text" data-lang-key="slide-topic-2.1"></div>
+            <div class="season-2" data-lang-key="season-2"></div>
+          </div>
+          <div class="row row-2">
+            <div class="num" data-lang-key="num-10"></div>
+            <div class="text" data-lang-key="slide-topic-2.1"></div>
+            <div class="season-3" data-lang-key="season-3"></div>
+          </div>
+          <div class="row row-3">
+            <div class="num" data-lang-key="num-12"></div>
+            <div class="text" data-lang-key="slide-topic-2.1"></div>
+            <div class="season-3" data-lang-key="season-3"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="./assets/js/app.js"></script>
+    <script>
+      const monthSwiper = new Swiper(".month-swiper", {
+        effect: "fade",
+        fadeEffect: {
+          crossFade: true,
+        },
+        speed: 800,
+        allowTouchMove: false,
+        loop: false,
+        navigation: {
+          nextEl: ".month-swiper-next",
+          prevEl: ".month-swiper-prev",
+        },
+      });
+
+      document
+        .querySelector(".month-swiper-next")
+        .addEventListener("click", function () {
+          if (monthSwiper.isEnd) {
+            window.location.href = "pranam.html";
+          }
+        });
+    </script>
+  </body>
+</html>

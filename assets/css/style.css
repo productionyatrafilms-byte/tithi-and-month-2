@@ -1,0 +1,338 @@
+@font-face {
+  font-family: "BalooRegular";
+  src: url("../../fonts/Baloo Regular 400.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MicrogrammaStd";
+  src: url("../../fonts/Microgramma\ D\ Extended\ Medium.otf") format("truetype");
+  font-weight: 400 !important;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "NotoSansGujaratiBold";
+  src: url("../../fonts/NotoSansGujarati-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NotoSansGujaratiRegular";
+  src: url("../../fonts/NotoSansGujarati-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  width: 100vw !important;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  overflow-x: hidden;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  font-family: "MicrogrammaStd";
+}
+
+.home-btn {
+  position: fixed;
+  top: 2.5vw;
+  left: 4%;
+  width: 3.5vw;
+  z-index: 99999;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.home-btn:hover {
+  transform: scale(1.15);
+}
+
+.home-btn img {
+  width: 100%;
+  display: block;
+}
+
+.page-title {
+  position: absolute;
+  top: 2%;
+  left: 50%;
+  height: auto;
+  text-align: center;
+  z-index: 10000;
+  transition: opacity 3s ease;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(219, 218, 218, 0.292);
+  backdrop-filter: blur(0.1vw);
+  padding: 1vw 2vw;
+  border: 0.1vw solid rgba(255, 255, 255, 0.498);
+  border-radius: 0.4vw;
+  box-shadow: 0.2vw 0.4vw 0.2vw rgba(3, 3, 3, 0.608);
+}
+
+.topic-viewer-overlay {
+  font-family: "MicrogrammaStd";
+
+}
+
+.page-title span {
+  font-size: 5vw;
+  text-align: center;
+  display: block;
+  font-weight: bolder !important;
+}
+
+.page-title .title-right {
+  width: 50%;
+}
+
+.title-1,
+.and {
+  color: #FFCD27;
+}
+
+.title-2 {
+  color: #9570FF;
+}
+
+.page-title .title-left {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2vw;
+}
+
+.language-container {
+  position: fixed;
+  top: 2.5vw;
+  right: 5%;
+  display: flex;
+  width: 9vw;
+  padding: 0.2vw 0.3vw;
+  height: auto;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "BalooRegular";
+  border: 0.3vw solid white;
+  background-color: #FFCD27;
+  border-radius: 50vw;
+  pointer-events: auto;
+  z-index: 99999;
+}
+
+.language-container div {
+  width: 2.5vw;
+  height: 2.5vw;
+  font-size: 1.6vw;
+  text-align: center;
+  border: 0.3vw solid white;
+  background: #FFCD27 !important;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-family: "BalooRegular", sans-serif;
+}
+
+.language-container div:hover {
+  background-color: white !important;
+  color: #9570FF;
+}
+
+.language-container div.active {
+  background-color: white !important;
+  color: #9570FF;
+}
+
+.pranam-container {
+  position: absolute;
+  width: 45vw;
+  height: auto;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pranam-container>.pranam-img {
+  position: relative;
+  width: 85%;
+  height: auto;
+  display: block;
+}
+
+.pranam-container>.pranam-img>img {
+  width: 100%;
+  display: block;
+}
+
+.pranam-img span {
+  z-index: 15;
+  position: absolute;
+  top: 17%;
+  left: 50%;
+  font-size: 3.4vw;
+  transform: translateX(-50%);
+  font-family: "BalooRegular";
+  color: #AB4339;
+  font-weight: lighter !important;
+}
+
+.pranam-container .home-btn-1 {
+  position: absolute;
+  top: 88%;
+  left: 35%;
+  transform: translateX(-50%);
+  width: 15vw;
+  height: auto;
+  transform: scale(1);
+  transition: transform 0.2s ease;
+}
+
+.home-btn-1:hover {
+  transform: scale(1.2);
+}
+
+.pranam-container .home-btn-1 img {
+  width: 100%;
+  display: block;
+}
+
+.home-btn-1 span {
+  z-index: 15;
+  position: absolute;
+  top: 45%;
+  left: 38%;
+  font-size: 2.5vw;
+  transform: translateY(-50%);
+  font-family: "BalooRegular";
+  color: #AB4339;
+}
+
+.back-btn {
+  position: absolute;
+  left: 4%;
+  top: 4%;
+  width: 3vw;
+  height: 3vw;
+  background-color: #FFCD27;
+  border: 0.25vw solid white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  transform: scale(1);
+  transition: transform 0.3s ease;
+  z-index: 50;
+}
+
+.back-btn i {
+  color: white;
+  font-size: 1vw;
+  transition: font-size 0.3s ease;
+}
+
+.back-btn:hover {
+  transform: scale(1.05);
+  background-color: white;
+}
+
+.back-btn:hover i {
+  font-size: 1.2vw;
+  color: #FFCD27 !important;
+}
+
+main {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tithi-img,
+.month-img {
+  width: 60%;
+  height: auto;
+  text-decoration: none;
+  position: relative;
+  transform: scale(1);
+  transition: transform 0.3s ease-out;
+}
+
+.tithi-img:hover,
+.month-img:hover {
+  transform: scale(0.95);
+}
+
+.tithi-img img,
+.month-img img {
+  width: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.tithi-img span,
+.month-img span {
+  font-size: 4vw;
+  color: #9570ff;
+  text-shadow: 0 0.1vw 0.15vw rgb(0, 0, 0);
+}
+
+.tithi-img span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.month-img span {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.left-container .col .row,
+.right-container .col .row {
+  font-family: "BalooRegular" !important;
+}
+
+.month-swiper-wrap {
+  font-family: "BalooRegular" !important;
+}

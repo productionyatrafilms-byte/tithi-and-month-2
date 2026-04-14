@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-lang-key="title"></title>
+    <link rel="stylesheet" href="./assets/css/style.css" />
+
+    <style>
+      body {
+        background-image: url("./assets/images/tithi-bg-img.png");
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: url("./assets/images/tithi-bg-img.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        z-index: -1;
+        transform: translateX(-100%);
+        animation: bgSlideIn 1.4s ease forwards;
+      }
+
+      @keyframes bgSlideIn {
+        from { transform: translateX(-100%); }
+        to { transform: translateX(0); }
+      }
+
+      main {
+        padding-top: 10vw;
+        position: relative;
+        z-index: 2;
+      }
+
+      .page-title {
+        position: absolute;
+        top: 2%;
+        left: 50%;
+        height: auto;
+        text-align: center;
+        z-index: 10000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(219, 218, 218, 0.292);
+        backdrop-filter: blur(0.1vw);
+        padding: 1vw;
+        border: 0.1vw solid rgba(255, 255, 255, 0.498);
+        border-radius: 0.4vw;
+        box-shadow: 0.2vw 0.4vw 0.2vw rgba(3, 3, 3, 0.608);
+        transform: translateX(-50%);
+        opacity: 0;
+        margin-left: -8vw;
+        animation: pageTitleEntry 1s ease forwards;
+        animation-delay: 0.2s;
+      }
+
+      @keyframes pageTitleEntry {
+        from { opacity: 0; margin-left: -8vw; }
+        to { opacity: 1; margin-left: 0; }
+      }
+
+      .col {
+        width: 25%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 4vw;
+        opacity: 0;
+        transform: translateX(-8vw);
+        animation: leftEntry 1s ease forwards;
+      }
+
+      .col .row {
+        position: relative;
+        width: 60%;
+        height: 5vw;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10vw;
+        border: 0.3vw solid #9570ff;
+        font-size: 1.5vw;
+        cursor: pointer;
+        transform: scale(1);
+        text-decoration: none;
+        transition:
+          opacity 0.45s ease,
+          visibility 0.45s ease,
+          transform 0.45s ease,
+          border 0.3s ease-out;
+      }
+
+      .col .row:hover {
+        transform: scale(1.1);
+        border: 0.3vw solid #ffcd27;
+      }
+
+      .col .row .row-topic { color: #4408a6; }
+
+      .col .row .num {
+        position: absolute;
+        top: -3.4vw;
+        width: 4.5vw;
+        height: 4.5vw;
+      }
+
+      .col .row .num img {
+        position: relative;
+        width: 100%;
+        display: block;
+        object-fit: contain;
+      }
+
+      .col .row .num span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+        color: #9570ff;
+      }
+
+      .col-1 { animation-delay: 0.25s; }
+      .col-2 { animation-delay: 0.4s; }
+      .col-3 { animation-delay: 0.55s; }
+      .col-4 { animation-delay: 0.7s; }
+
+      @keyframes leftEntry {
+        from { opacity: 0; transform: translateX(-8vw); }
+        to { opacity: 1; transform: translateX(0); }
+      }
+
+      main.rows-hidden .row {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: scale(0.9);
+      }
+
+      /* =========================
+         DETAIL VIEW
+      ========================= */
+      .topic-viewer-overlay {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        background: transparent;
+      }
+
+      .topic-viewer-overlay.active {
+        display: flex;
+      }
+
+      .topic-viewer {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+      }
+
+      .viewer-main {
+        width: 92vw;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      /* Key fix: NO overflow:hidden, NO width transition.
+         The side keeps its full dimensions at all times.
+         Only opacity + translateX animate — nothing that
+         would cause the absolutely-positioned inner image
+         to recalculate its position. */
+      .slide-side {
+        width: 25vw;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition:
+          opacity 0.5s ease,
+          transform 0.5s ease,
+          visibility 0.5s ease;
+      }
+
+      .side-image-outer {
+        width: 20vw;
+        height: 20vw;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .side-image-outer > img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+      }
+
+      .side-image-inner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 15.6vw;
+        height: 15.6vw;
+        transform: translate(-51%, -52%);
+        border-radius: 50%;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .side-image-inner img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+      }
+
+      .side-caption {
+        margin-top: 1.8vw;
+        color: white;
+        font-size: 2.2vw;
+        line-height: 1.2;
+        text-align: center;
+      }
+
+      .viewer-center {
+        width: 34vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .center-top {
+        width: 100%;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .center-topic-box {
+        width: 100%;
+        min-height: 6vw;
+        padding: 1vw 2vw;
+        border-radius: 3vw;
+        border: 0.18vw solid #dba800;
+        background: rgba(255, 255, 255, 0.88);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+      }
+
+      .center-topic-text {
+        font-size: 2.8vw;
+        color: #4d23b2;
+        line-height: 1.1;
+        text-align: center;
+      }
+
+      .center-number {
+        position: absolute;
+        top: -3vw;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4.8vw;
+        height: 4.8vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #8a38f5;
+        font-size: 2vw;
+        z-index: 3;
+        background-image: url("./assets/images/num.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+
+      .viewer-nav {
+        margin-top: 2vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2vw;
+      }
+
+      .viewer-prev,
+      .viewer-next {
+        width: 4.5vw;
+        height: 4.5vw;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+        transition: transform 0.3s ease;
+      }
+
+      .viewer-prev img,
+      .viewer-next img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+      }
+
+      .viewer-prev:hover,
+      .viewer-next:hover { transform: scale(1.05); }
+
+      .viewer-prev:disabled,
+      .viewer-next:disabled {
+        opacity: 0.4;
+        pointer-events: none;
+      }
+
+      /* Hide states — only opacity + translateX, width never changes */
+      .viewer-main.hide-right .slide-side-right {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateX(3vw);
+      }
+
+      .viewer-main.hide-left .slide-side-left {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateX(-3vw);
+      }
+    </style>
+  </head>
+  <body>
+    <a class="home-button home-btn" href="index.html">
+      <img src="./assets/images/home-btn.png" alt="" />
+    </a>
+
+    <div class="page-title">
+      <span class="title-1" data-lang-key="title-1"></span>
+    </div>
+
+    <div class="language-container">
+      <div class="english active">E</div>
+      <div class="hindi">H</div>
+      <div class="gujrati">G</div>
+    </div>
+
+    <main id="mainContent">
+      <div class="col col-1">
+        <a class="row row-1">
+          <div class="num num-1">
+            <span data-lang-key="num-1"></span>
+            <img src="./assets/images/num.png" alt="" />
+          </div>
+          <div class="row-topic" data-lang-key="slide-1.1"></div>
+        </a>
+        <a class="row row-2">
+          <div class="num num-2">
+            <span data-lang-key="num-5"></span>
+            <img src="./assets/images/num.png" alt="" />
+          </div>
+          <div class="row-topic" data-lang-key="slide-1.5"></div>
+        </a>
+        <a class="row row-3">
+          <div class="num num-3">
+            <span data-lang-key="num-9"></span>
+            <img src="./assets/images/num.png" alt="" />
+          </div>
+          <div class="row-topic" data-lang-key="slide-1.9"></div>
+        </a>
+        <a class="row row-4">
+          <div class="num num-4">
+            <span data-lang-key="num-13"></span>
+            <img src="./assets/images/num.png" alt="" />
+          </div>
+          <div class="row-topic" data-lang-key="slide-1.13"></div>
+        </a>
+      </div>
+
+      <div class="col col-2">
+        <a class="row row-1">
+          <div class="num num-1">
+            <span data-lang-key="num-2"></span>
+            <img src="./assets/images/num.png" alt="" />
+          </div>
+          <div class="row-topic" data-lang-key="slide-1.2"></div>
+        </a>
+        <a class="row row-2">
+          <div class="num num-2">
+            <span data-lang-key="num-6"></span>
+            <img src="./assets/images/num.png" alt="" />
+          </div>
+          <div class="row-topic" data-lang-key="slide-1.6"></div>
+        </a>
+        <a class="row row-3">
+          <div class="num num-3">
+            <span data-lang-key="num-10"></span>
+            <img src="./assets/images/num.png" alt="" />
+          </div>
+          <div class="row-topic" data-lang-key="slide-1.10"></div>
+        </a>
+        <a class="row row-4">
+          <div class="num num-4">
+            <span data-lang-key="num-14"></span>
+            <img src="./assets/images/num.png" alt="" />
+          </div>
+          <div class="row-topic" data-lang-key="slide-1.14"></div>
+        </a>
+      </div>
+
+      <div class="col col-3">
+        <a class="row row-1">
+          <div class="num num-1">
+            <span data-lang-key="num-3"></span>
+            <img src="./assets/images/num.png" alt="" />
+          </div>
+          <div class="row-topic" data-lang-key="slide-1.3"></div>
+        </a>
+        <a class="row row-2">
+          <div class="num num-2">
+            <span data-lang-key="num-7"></span>
+            <img src="./assets/images/num.png" alt="" />
+          </div>
+          <div class="row-topic" data-lang-key="slide-1.7"></div>
+        </a>
+        <a class="row row-3">
+          <div class="num num-3">
+            <span data-lang-key="num-11"></span>
+            <img src="./assets/images/num.png" alt="" />
+          </div>
+          <div class="row-topic" data-lang-key="slide-1.11"></div>
+        </a>
+        <a class="row row-4">
+          <div class="num num-4">
+            <span data-lang-key="num-15"></span>
+            <img src="./assets/images/num.png" alt="" />
+          </div>
+          <div class="row-topic" data-lang-key="slide-1.15"></div>
+        </a>
+      </div>
+
+      <div class="col col-4">
+        <a class="row row-1">
+          <div class="num num-1">
+            <span data-lang-key="num-4"></span>
+            <img src="./assets/images/num.png" alt="" />
+          </div>
+          <div class="row-topic" data-lang-key="slide-1.4"></div>
+        </a>
+        <a class="row row-2">
+          <div class="num num-2">
+            <span data-lang-key="num-8"></span>
+            <img src="./assets/images/num.png" alt="" />
+          </div>
+          <div class="row-topic" data-lang-key="slide-1.8"></div>
+        </a>
+        <a class="row row-3">
+          <div class="num num-3">
+            <span data-lang-key="num-12"></span>
+            <img src="./assets/images/num.png" alt="" />
+          </div>
+          <div class="row-topic" data-lang-key="slide-1.12"></div>
+        </a>
+        <a class="row row-4">
+          <div class="num num-4">
+            <span data-lang-key="num-16"></span>
+            <img src="./assets/images/num.png" alt="" />
+          </div>
+          <div class="row-topic" data-lang-key="slide-1.16"></div>
+        </a>
+      </div>
+    </main>
+
+    <div class="topic-viewer-overlay" id="topicViewerOverlay">
+      <div class="topic-viewer">
+        <div class="viewer-main">
+          <div class="slide-side slide-side-left">
+            <div class="side-image-outer">
+              <img src="./assets/images/elegant-pastel-3d-mirror 2.png" alt="Left Outer" />
+              <div class="side-image-inner">
+                <img src="./assets/images/b-to-w/1.png" alt="Left Inner" id="leftInnerImage" />
+              </div>
+            </div>
+            <div class="side-caption" data-lang-key="left-caption">Sud/Shukla Paksh</div>
+          </div>
+
+          <div class="viewer-center">
+            <div class="center-top">
+              <div class="center-number" id="viewerNumber">1</div>
+              <div class="center-topic-box">
+                <div class="center-topic-text" id="viewerTopic">Ekam</div>
+              </div>
+            </div>
+            <div class="viewer-nav">
+              <button class="viewer-prev" id="viewerPrev">
+                <img src="./assets/images/prev-btn.png" alt="Previous" />
+              </button>
+              <button class="viewer-next" id="viewerNext">
+                <img src="./assets/images/next-btn.png" alt="Next" />
+              </button>
+            </div>
+          </div>
+
+          <div class="slide-side slide-side-right">
+            <div class="side-image-outer">
+              <img src="./assets/images/elegant-pastel-3d-mirror 2.png" alt="Right Outer" />
+              <div class="side-image-inner">
+                <img src="./assets/images/b-to-w/18.png" alt="Right Inner" id="rightInnerImage" />
+              </div>
+            </div>
+            <div class="side-caption" data-lang-key="right-caption">Vad/Krishna Paksh</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./assets/js/app.js"></script>
+
+    <script>
+      (() => {
+        const topicViewerOverlay = document.getElementById("topicViewerOverlay");
+        const viewerPrev = document.getElementById("viewerPrev");
+        const viewerNext = document.getElementById("viewerNext");
+        const viewerNumber = document.getElementById("viewerNumber");
+        const viewerTopic = document.getElementById("viewerTopic");
+        const leftInnerImage = document.getElementById("leftInnerImage");
+        const rightInnerImage = document.getElementById("rightInnerImage");
+        const rowEls = document.querySelectorAll("main .row");
+        const mainContent = document.getElementById("mainContent");
+        const viewerMain = document.querySelector(".viewer-main");
+
+        let currentIndex = 0;
+
+        const topicSlides = [
+          { numKey: "num-1",  topicKey: "slide-topic-1.1",  fallbackTopicKey: "slide-1.1",  leftImg: "./assets/images/w-to-b/14.png", rightImg: "./assets/images/w-to-b/16.png" },
+          { numKey: "num-2",  topicKey: "slide-topic-1.2",  fallbackTopicKey: "slide-1.2",  leftImg: "./assets/images/w-to-b/13.png", rightImg: "./assets/images/w-to-b/17.png" },
+          { numKey: "num-3",  topicKey: "slide-topic-1.3",  fallbackTopicKey: "slide-1.3",  leftImg: "./assets/images/w-to-b/12.png", rightImg: "./assets/images/w-to-b/18.png" },
+          { numKey: "num-4",  topicKey: "slide-topic-1.4",  fallbackTopicKey: "slide-1.4",  leftImg: "./assets/images/w-to-b/11.png", rightImg: "./assets/images/w-to-b/19.png" },
+          { numKey: "num-5",  topicKey: "slide-topic-1.5",  fallbackTopicKey: "slide-1.5",  leftImg: "./assets/images/w-to-b/10.png", rightImg: "./assets/images/w-to-b/20.png" },
+          { numKey: "num-6",  topicKey: "slide-topic-1.6",  fallbackTopicKey: "slide-1.6",  leftImg: "./assets/images/w-to-b/9.png",  rightImg: "./assets/images/w-to-b/21.png" },
+          { numKey: "num-7",  topicKey: "slide-topic-1.7",  fallbackTopicKey: "slide-1.7",  leftImg: "./assets/images/w-to-b/8.png",  rightImg: "./assets/images/w-to-b/22.png" },
+          { numKey: "num-8",  topicKey: "slide-topic-1.8",  fallbackTopicKey: "slide-1.8",  leftImg: "./assets/images/w-to-b/7.png",  rightImg: "./assets/images/w-to-b/23.png" },
+          { numKey: "num-9",  topicKey: "slide-topic-1.9",  fallbackTopicKey: "slide-1.9",  leftImg: "./assets/images/w-to-b/6.png",  rightImg: "./assets/images/w-to-b/24.png" },
+          { numKey: "num-10", topicKey: "slide-topic-1.10", fallbackTopicKey: "slide-1.10", leftImg: "./assets/images/w-to-b/5.png",  rightImg: "./assets/images/w-to-b/25.png" },
+          { numKey: "num-11", topicKey: "slide-topic-1.11", fallbackTopicKey: "slide-1.11", leftImg: "./assets/images/w-to-b/4.png",  rightImg: "./assets/images/w-to-b/26.png" },
+          { numKey: "num-12", topicKey: "slide-topic-1.12", fallbackTopicKey: "slide-1.12", leftImg: "./assets/images/w-to-b/3.png",  rightImg: "./assets/images/w-to-b/27.png" },
+          { numKey: "num-13", topicKey: "slide-topic-1.13", fallbackTopicKey: "slide-1.13", leftImg: "./assets/images/13.png",         rightImg: "./assets/images/w-to-b/28.png" },
+          { numKey: "num-14", topicKey: "slide-topic-1.14", fallbackTopicKey: "slide-1.14", leftImg: "./assets/images/14.png",         rightImg: "./assets/images/w-to-b/29.png" },
+          { numKey: "num-15", topicKey: "slide-topic-1.15", fallbackTopicKey: "slide-1.15", leftImg: "./assets/images/w-to-b/1.png",  rightImg: "./assets/images/w-to-b/29.png" },
+          { numKey: "num-16", topicKey: "slide-topic-1.16", fallbackTopicKey: "slide-1.16", leftImg: "./assets/images/w-to-b/1.png",  rightImg: "./assets/images/16.png" },
+        ];
+
+        function getTranslationsObject() {
+          if (window.translations) return window.translations;
+          if (window.translationData) return window.translationData;
+          return {};
+        }
+
+        function getCurrentLanguage() {
+          const bodyLang = document.body.getAttribute("data-lang");
+          if (bodyLang === "hi") return "Hindi";
+          if (bodyLang === "gu") return "Gujarati";
+          return "English";
+        }
+
+        function getTranslatedValue(key, fallback = "") {
+          const translationsObj = getTranslationsObject();
+          const currentLang = getCurrentLanguage();
+          if (translationsObj && translationsObj[currentLang] && translationsObj[currentLang][key] !== undefined) {
+            return translationsObj[currentLang][key];
+          }
+          const fallbackEl = document.querySelector(`[data-lang-key="${key}"]`);
+          if (fallbackEl) {
+            const text = fallbackEl.textContent.trim();
+            if (text) return text;
+          }
+          return fallback;
+        }
+
+        function updateViewer(index) {
+          const item = topicSlides[index];
+          if (!item) return;
+
+          currentIndex = index;
+
+          viewerNumber.textContent = getTranslatedValue(item.numKey, String(index + 1));
+
+          const topicText =
+            getTranslatedValue(item.topicKey, "") ||
+            getTranslatedValue(item.fallbackTopicKey, "");
+          viewerTopic.textContent = topicText;
+
+          leftInnerImage.src = item.leftImg;
+          rightInnerImage.src = item.rightImg;
+
+          // Step 1: remove all hide classes so any currently-hidden side
+          // is fully visible again before we potentially re-hide another one.
+          viewerMain.classList.remove("hide-left", "hide-right");
+
+          // Step 2: one rAF so the browser paints the "all visible" state,
+          // then add the correct hide class — this lets the CSS transition
+          // animate FROM the visible state TO the hidden state cleanly.
+          requestAnimationFrame(() => {
+            if (item.numKey === "num-15") {
+              viewerMain.classList.add("hide-right");
+            } else if (item.numKey === "num-16") {
+              viewerMain.classList.add("hide-left");
+            }
+          });
+
+          viewerPrev.disabled = currentIndex === 0;
+          viewerNext.disabled = currentIndex === topicSlides.length - 1;
+        }
+
+        function openViewer(index) {
+          currentIndex = index;
+          updateViewer(index);
+          mainContent.classList.add("rows-hidden");
+          topicViewerOverlay.classList.add("active");
+        }
+
+        rowEls.forEach((row) => {
+          row.addEventListener("click", function (e) {
+            e.preventDefault();
+            const numSpan = row.querySelector(".num span[data-lang-key]");
+            if (!numSpan) return;
+            const numKey = numSpan.getAttribute("data-lang-key");
+            const slideIndex = topicSlides.findIndex((slide) => slide.numKey === numKey);
+            if (slideIndex !== -1) openViewer(slideIndex);
+          });
+        });
+
+        viewerPrev.addEventListener("click", function (e) {
+          e.stopPropagation();
+          if (currentIndex > 0) updateViewer(currentIndex - 1);
+        });
+
+        viewerNext.addEventListener("click", function (e) {
+          e.stopPropagation();
+          if (currentIndex < topicSlides.length - 1) updateViewer(currentIndex + 1);
+        });
+
+        document.addEventListener("keydown", function (e) {
+          if (!topicViewerOverlay.classList.contains("active")) return;
+          if (e.key === "ArrowLeft" && currentIndex > 0) updateViewer(currentIndex - 1);
+          if (e.key === "ArrowRight" && currentIndex < topicSlides.length - 1) updateViewer(currentIndex + 1);
+        });
+
+        const observer = new MutationObserver(() => {
+          if (topicViewerOverlay.classList.contains("active")) updateViewer(currentIndex);
+        });
+
+        observer.observe(document.body, {
+          attributes: true,
+          attributeFilter: ["data-lang"],
+        });
+      })();
+    </script>
+  </body>
+</html>
