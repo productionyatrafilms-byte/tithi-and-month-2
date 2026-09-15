@@ -4,10 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title data-lang-key="pranam"></title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-    />
+    <link rel="stylesheet" href="./fontawesome/css/all.min.css" />
     <link rel="stylesheet" href="./assets/css/style.css" />
     <style>
       body {
@@ -28,6 +25,15 @@
     </div>
     <div class="pranam-container">
       <div class="pranam-img">
+        <div class="pranam-video">
+          <video
+            src="./assets/videos/pranam.mp4"
+            autoplay
+            muted
+            loop
+            playsinline
+          ></video>
+        </div>
         <span data-lang-key="pranam"></span>
         <img src="./assets/images/pranam.png" alt="" />
       </div>
@@ -36,6 +42,46 @@
         <img src="./assets/images/home-btn-1.png" alt="" />
       </a>
     </div>
+    <script src="./assets/js/data.js"></script>
     <script src="./assets/js/app.js"></script>
+    <script>
+      (function () {
+        "use strict";
+
+        const pranamSound = new Audio("./assets/audio/pranam.mp3");
+        pranamSound.preload = "auto";
+
+        let pranamHasPlayed = false;
+
+        function playPranamOnce() {
+          if (pranamHasPlayed) return;
+          pranamHasPlayed = true;
+
+          const playPromise = pranamSound.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(() => {
+              // browser blocked autoplay, retry on the first real interaction
+              pranamHasPlayed = false;
+              waitForInteraction();
+            });
+          }
+        }
+
+        function waitForInteraction() {
+          const trigger = () => {
+            document.removeEventListener("click", trigger);
+            document.removeEventListener("keydown", trigger);
+            document.removeEventListener("touchstart", trigger);
+            playPranamOnce();
+          };
+
+          document.addEventListener("click", trigger, { once: true });
+          document.addEventListener("keydown", trigger, { once: true });
+          document.addEventListener("touchstart", trigger, { once: true });
+        }
+
+        window.addEventListener("DOMContentLoaded", playPranamOnce);
+      })();
+    </script>
   </body>
 </html>

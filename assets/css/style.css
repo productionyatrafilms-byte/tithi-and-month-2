@@ -29,6 +29,35 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "ITFDevanagari";
+  src: url("../../fonts/ITFDevanagari-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ITFDevanagari";
+  src: url("../../fonts/ITFDevanagari-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* app.js sets body[data-lang] to the current language; these target every
+   [data-lang-key] text element directly (many of which set their own
+   font-family) so !important actually overrides them instead of losing to
+   inheritance, and Hindi/Gujarati always render in a font with the right
+   glyphs instead of falling back to BalooRegular. */
+body[data-lang="hi"] [data-lang-key] {
+  font-family: "ITFDevanagari" !important;
+  font-weight: 700 !important;
+}
+
+body[data-lang="gu"] [data-lang-key] {
+  font-family: "NotoSansGujaratiRegular" !important;
+}
 
 *,
 *::before,
@@ -199,10 +228,94 @@ body {
   display: block;
 }
 
+/* a self-contained circular video card: fixed size, its own backdrop, and
+   feathered edges so it blends into the pranam frame instead of being
+   hard-cropped against it */
+.pranam-video {
+  position: absolute;
+  left: 50%;
+  top: 49%;
+  transform: translate(-50%, -50%);
+  width: 28vw;
+  height: 28vw;
+  border-radius: 50%;
+  background-color: #f6f6f6;
+  background-image: url("../images/pranam-bg-1.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding-right: 2.5vw;
+}
+
+.pranam-video video {
+  width: 90%;
+  height: 83%;
+  object-fit: cover;
+
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, 0.8) 2%,
+      rgba(0, 0, 0, 0.95) 4%,
+      black 6%,
+      black 90%,
+      rgba(0, 0, 0, 0.95) 96%,
+      rgba(0, 0, 0, 0.8) 98%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(0, 0, 0, 0.8) 2%,
+      rgba(0, 0, 0, 0.95) 4%,
+      black 6%,
+      black 90%,
+      rgba(0, 0, 0, 0.95) 96%,
+      rgba(0, 0, 0, 0.8) 98%,
+      transparent 100%
+    );
+  -webkit-mask-composite: source-in;
+
+  mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, 0.8) 2%,
+      rgba(0, 0, 0, 0.95) 4%,
+      black 6%,
+      black 90%,
+      rgba(0, 0, 0, 0.95) 96%,
+      rgba(0, 0, 0, 0.8) 98%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(0, 0, 0, 0.8) 2%,
+      rgba(0, 0, 0, 0.95) 4%,
+      black 6%,
+      black 90%,
+      rgba(0, 0, 0, 0.95) 96%,
+      rgba(0, 0, 0, 0.8) 98%,
+      transparent 100%
+    );
+  mask-composite: intersect;
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
 .pranam-img span {
   z-index: 15;
   position: absolute;
-  top: 17%;
+  top: 0%;
   left: 50%;
   font-size: 3.4vw;
   transform: translateX(-50%);
