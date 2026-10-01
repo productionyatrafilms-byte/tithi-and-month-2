@@ -67,13 +67,13 @@ const data = {
     "slide-topic-2.7": "Vaishakh",
     "slide-topic-2.8": "Jyesth",
     "slide-topic-2.9": "Ashadh",
-    "slide-topic-2.10": "shravan",
+    "slide-topic-2.10": "Shravan",
     "slide-topic-2.11": "Bhadrapd",
     "slide-topic-2.12": "Ashwin",
 
-    "season-1": "winter season",
-    "season-2": "summer season",
-    "season-3": "rainy season",
+    "season-1": "Winter Season",
+    "season-2": "Summer Season",
+    "season-3": "Rainy Season",
 
     "click": "Click",
     "home": "Home",
