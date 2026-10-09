@@ -19,6 +19,19 @@
         justify-content: center;
         align-items: center;
       }
+
+      /* Let the two parts of the header size to their text and sit centred
+         together, instead of two fixed 50% halves. */
+      .page-title {
+        justify-content: center;
+        gap: 1.5vw;
+      }
+
+      .page-title .title-left,
+      .page-title .title-right {
+        width: auto;
+        text-align: center;
+      }
     </style>
   </head>
   <body>
@@ -33,7 +46,7 @@
         <span class="and" data-lang-key="and"></span>
       </div>
       <div class="title-right">
-        <span class="title-2" data-lang-key="title-2"></span>
+        <span class="title-2" data-lang-key="title-2-short"></span>
       </div>
     </div>
 
@@ -47,12 +60,11 @@
       <div class="right-container">
         <a href="months.html" class="month-img">
           <img src="./assets/images/month.png" alt="" />
-          <span data-lang-key="title-2"></span>
+          <span data-lang-key="title-2-short"></span>
         </a>
       </div>
     </main>
     <script src="./assets/js/data.js"></script>
     <script src="./assets/js/app.js"></script>
-    <script src="./assets/js/djp.js"></script>
   </body>
 </html>

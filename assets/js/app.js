@@ -34,9 +34,18 @@ function applyLanguage(lang) {
   document.querySelectorAll("[data-lang-key]").forEach((el) => {
     const key = el.getAttribute("data-lang-key");
     if (langData[key] !== undefined) {
-      el.innerHTML = String(langData[key]).replace(/\n/g, "<br>");
+      let text = String(langData[key]);
+
+      // data-first-only: show just the first of several "a / b / c" names
+      if (el.hasAttribute("data-first-only")) {
+        text = text.split("/")[0].trim();
+      }
+
+      el.innerHTML = text.replace(/\n/g, "<br>");
     }
   });
+
+  document.dispatchEvent(new CustomEvent("languageApplied"));
 }
 
 // always load English on refresh/page load

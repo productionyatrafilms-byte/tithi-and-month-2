@@ -60,6 +60,9 @@
 
       .page-title span {
         color: #9570ff;
+        font-size: 3vw;
+        line-height: 1.2;
+        white-space: nowrap;
       }
 
       @keyframes pageTitleEntry {
@@ -114,6 +117,13 @@
         background-position: center;
         background-repeat: no-repeat;
         padding-top: 2.8vw;
+        cursor: pointer;
+        transition: transform 0.25s ease;
+      }
+
+      .left-container .col .row:hover,
+      .right-container .col .row:hover {
+        transform: scale(1.04);
       }
 
       .left-container .col .row .num,
@@ -150,22 +160,7 @@
         line-height: 1.5;
       }
 
-      /* Long Hindi/Gujarati month names (2, 11, 12) wrap onto two lines; keep
-         the name, number and season inside the card's paper area. */
-      body[data-lang="hi"] .row.long-name .num,
-      body[data-lang="gu"] .row.long-name .num {
-        font-size: 1.3vw !important;
-        line-height: 1.2 !important;
-      }
-
-      body[data-lang="hi"] .row.long-name .text,
-      body[data-lang="gu"] .row.long-name .text {
-        max-width: 9.6vw;
-        text-align: center;
-        font-size: 1.1vw !important;
-        line-height: 1.25 !important;
-      }
-
+      /* Season label size for months 2, 11 and 12 in Hindi/Gujarati. */
       body[data-lang="hi"] .row.long-name [class^="season-"] {
         font-size: 1.4vw !important;
         line-height: 1.3 !important;
@@ -279,6 +274,64 @@
         margin-top: 0.2vw;
       }
 
+      /* Page-flip animation: a copy of the calendar page, hinged at its top
+         edge, lifts up and over (or drops back down) when the month changes. */
+      .calendar-flip-holder,
+      .calendar-flip-layer {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .calendar-flip-layer {
+        z-index: 4;
+      }
+
+      .calendar-page {
+        position: absolute;
+        transform-origin: 50% 0;
+        transform-style: preserve-3d;
+        border-radius: 0.8vw;
+        box-shadow: 0 0.6vw 1.2vw rgba(80, 60, 140, 0.3);
+      }
+
+      .calendar-page-face {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border-radius: inherit;
+      }
+
+      .calendar-page-front {
+        background: #e9e0f1;
+      }
+
+      /* Back of the page, seen once it has swung up and over. */
+      .calendar-page-back {
+        background: linear-gradient(#d9cdea, #cfc1e4);
+        opacity: 0;
+      }
+
+      /* Darkens the page as it tilts away from the light. */
+      .calendar-page-shade {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0;
+        background: linear-gradient(
+          to bottom,
+          rgba(70, 50, 140, 0.05),
+          rgba(70, 50, 140, 0.5)
+        );
+      }
+
+      .calendar-page-content {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
       .month-swiper-nav {
         width: 14vw;
         margin-top: 1.5vw;
@@ -339,17 +392,17 @@
         <div class="col col-1">
           <div class="row row-1">
             <div class="num" data-lang-key="num-1"></div>
-            <div class="text" data-lang-key="slide-topic-2.1"></div>
+            <div class="text" data-lang-key="slide-topic-2.1" data-first-only></div>
             <div class="season-1" data-lang-key="season-1"></div>
           </div>
           <div class="row row-2">
             <div class="num" data-lang-key="num-3"></div>
-            <div class="text" data-lang-key="slide-topic-2.3"></div>
+            <div class="text" data-lang-key="slide-topic-2.3" data-first-only></div>
             <div class="season-1" data-lang-key="season-1"></div>
           </div>
           <div class="row row-3">
             <div class="num" data-lang-key="num-5"></div>
-            <div class="text" data-lang-key="slide-topic-2.5"></div>
+            <div class="text" data-lang-key="slide-topic-2.5" data-first-only></div>
             <div class="season-2" data-lang-key="season-2"></div>
           </div>
         </div>
@@ -358,17 +411,17 @@
         <div class="col col-2">
           <div class="row row-1 long-name">
             <div class="num" data-lang-key="num-2"></div>
-            <div class="text" data-lang-key="slide-topic-2.2"></div>
+            <div class="text" data-lang-key="slide-topic-2.2" data-first-only></div>
             <div class="season-1" data-lang-key="season-1"></div>
           </div>
           <div class="row row-2">
             <div class="num" data-lang-key="num-4"></div>
-            <div class="text" data-lang-key="slide-topic-2.4"></div>
+            <div class="text" data-lang-key="slide-topic-2.4" data-first-only></div>
             <div class="season-1" data-lang-key="season-1"></div>
           </div>
           <div class="row row-3">
             <div class="num" data-lang-key="num-6"></div>
-            <div class="text" data-lang-key="slide-topic-2.6"></div>
+            <div class="text" data-lang-key="slide-topic-2.6" data-first-only></div>
             <div class="season-2" data-lang-key="season-2"></div>
           </div>
         </div>
@@ -502,17 +555,17 @@
         <div class="col col-3">
           <div class="row row-1">
             <div class="num" data-lang-key="num-7"></div>
-            <div class="text" data-lang-key="slide-topic-2.7"></div>
+            <div class="text" data-lang-key="slide-topic-2.7" data-first-only></div>
             <div class="season-2" data-lang-key="season-2"></div>
           </div>
           <div class="row row-2">
             <div class="num" data-lang-key="num-9"></div>
-            <div class="text" data-lang-key="slide-topic-2.9"></div>
+            <div class="text" data-lang-key="slide-topic-2.9" data-first-only></div>
             <div class="season-3" data-lang-key="season-3"></div>
           </div>
           <div class="row row-3 long-name">
             <div class="num" data-lang-key="num-11"></div>
-            <div class="text" data-lang-key="slide-topic-2.11"></div>
+            <div class="text" data-lang-key="slide-topic-2.11" data-first-only></div>
             <div class="season-3" data-lang-key="season-3"></div>
           </div>
         </div>
@@ -521,17 +574,17 @@
         <div class="col col-4">
           <div class="row row-1">
             <div class="num" data-lang-key="num-8"></div>
-            <div class="text" data-lang-key="slide-topic-2.8"></div>
+            <div class="text" data-lang-key="slide-topic-2.8" data-first-only></div>
             <div class="season-2" data-lang-key="season-2"></div>
           </div>
           <div class="row row-2">
             <div class="num" data-lang-key="num-10"></div>
-            <div class="text" data-lang-key="slide-topic-2.10"></div>
+            <div class="text" data-lang-key="slide-topic-2.10" data-first-only></div>
             <div class="season-3" data-lang-key="season-3"></div>
           </div>
           <div class="row row-3 long-name">
             <div class="num" data-lang-key="num-12"></div>
-            <div class="text" data-lang-key="slide-topic-2.12"></div>
+            <div class="text" data-lang-key="slide-topic-2.12" data-first-only></div>
             <div class="season-3" data-lang-key="season-3"></div>
           </div>
         </div>
@@ -541,14 +594,13 @@
     <script src="./assets/js/swiper-bundle.min.js"></script>
     <script src="./assets/js/data.js"></script>
     <script src="./assets/js/app.js"></script>
-    <script src="./assets/js/djp.js"></script>
     <script>
       const monthSwiper = new Swiper(".month-swiper", {
         effect: "fade",
         fadeEffect: {
           crossFade: true,
         },
-        speed: 800,
+        speed: 0,
         allowTouchMove: false,
         loop: false,
         navigation: {
@@ -556,6 +608,254 @@
           prevEl: ".month-swiper-prev",
         },
       });
+
+      /* ===== Calendar page flip ===== */
+
+      const monthOverlay = document.querySelector(".month-swiper-overlay");
+      const monthBg = document.querySelector(".month-swiper-bg");
+
+      // The paper area inside month.png (611 x 555), as fractions of the image.
+      const PAPER = { x: 43 / 611, y: 180 / 555, w: 505 / 611, h: 306 / 555 };
+      const FLIP_MS = 800;
+      let activeFlip = null;
+
+      function getPaperRect() {
+        const ow = monthOverlay.clientWidth;
+        const oh = monthOverlay.clientHeight;
+        const nw = monthBg.naturalWidth || 611;
+        const nh = monthBg.naturalHeight || 555;
+        const scale = Math.min(ow / nw, oh / nh);
+        const dw = nw * scale;
+        const dh = nh * scale;
+        const dx = (ow - dw) / 2;
+        const dy = (oh - dh) / 2;
+
+        return {
+          left: dx + PAPER.x * dw,
+          top: dy + PAPER.y * dh,
+          width: PAPER.w * dw,
+          height: PAPER.h * dh,
+          ow,
+          oh,
+        };
+      }
+
+      // A flat copy of one slide's content, cropped to the paper rectangle.
+      function buildCalendarPage(slide, rect) {
+        const page = document.createElement("div");
+        page.className = "calendar-page";
+        page.style.left = rect.left + "px";
+        page.style.top = rect.top + "px";
+        page.style.width = rect.width + "px";
+        page.style.height = rect.height + "px";
+
+        const front = document.createElement("div");
+        front.className = "calendar-page-face calendar-page-front";
+
+        const content = document.createElement("div");
+        content.className = "calendar-page-content";
+        content.style.left = -rect.left + "px";
+        content.style.top = -rect.top + "px";
+        content.style.width = rect.ow + "px";
+        content.style.height = rect.oh + "px";
+        content.appendChild(
+          slide.querySelector(".month-slide-content").cloneNode(true),
+        );
+
+        const shade = document.createElement("div");
+        shade.className = "calendar-page-shade";
+
+        front.append(content, shade);
+
+        const back = document.createElement("div");
+        back.className = "calendar-page-face calendar-page-back";
+
+        page.append(front, back);
+        return page;
+      }
+
+      function endActiveFlip() {
+        if (!activeFlip) return;
+
+        activeFlip.animation.cancel();
+        activeFlip.faceAnimations.forEach((a) => a.cancel());
+        clearTimeout(activeFlip.timer);
+        activeFlip.layer.remove();
+        activeFlip = null;
+      }
+
+      function flipCalendar(fromSlide, toSlide, forward) {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          return;
+        }
+
+        endActiveFlip();
+
+        const rect = getPaperRect();
+        const holder = document.createElement("div");
+        holder.className = "calendar-flip-holder";
+        monthOverlay.appendChild(holder);
+
+        const layer = document.createElement("div");
+        layer.className = "calendar-flip-layer";
+        layer.style.perspective = rect.width * 3 + "px";
+        layer.style.perspectiveOrigin = `${rect.left + rect.width / 2}px ${rect.top}px`;
+
+        let flipper;
+        let angles;
+        let frontFrames;
+        let backFrames;
+        let shadeFrames;
+        let layerFrames = null;
+
+        // The front and back of the page are swapped by hand at the halfway
+        // (edge-on) point of the swing.
+        const frontUntilHalf = [
+          { opacity: 1, offset: 0 },
+          { opacity: 1, offset: 0.4999 },
+          { opacity: 0, offset: 0.5 },
+          { opacity: 0, offset: 1 },
+        ];
+        const backAfterHalf = [
+          { opacity: 0, offset: 0 },
+          { opacity: 0, offset: 0.4999 },
+          { opacity: 1, offset: 0.5 },
+          { opacity: 1, offset: 1 },
+        ];
+
+        if (forward) {
+          // Next: the current page swings up and over its top hinge, back
+          // side showing, and fades out once it is up and over.
+          flipper = buildCalendarPage(fromSlide, rect);
+          angles = ["rotateX(0deg)", "rotateX(180deg)"];
+          frontFrames = frontUntilHalf;
+          backFrames = backAfterHalf;
+          shadeFrames = [{ opacity: 0 }, { opacity: 1 }];
+          layerFrames = [
+            { opacity: 1, offset: 0 },
+            { opacity: 1, offset: 0.8 },
+            { opacity: 0, offset: 1 },
+          ];
+        } else {
+          // Prev: the earlier page swings back down onto the current page,
+          // which stays solid underneath until it is covered.
+          const underLayer = document.createElement("div");
+          underLayer.className = "calendar-flip-layer";
+          underLayer.appendChild(buildCalendarPage(fromSlide, rect));
+          holder.appendChild(underLayer);
+
+          flipper = buildCalendarPage(toSlide, rect);
+          angles = ["rotateX(180deg)", "rotateX(0deg)"];
+          frontFrames = backAfterHalf;
+          backFrames = [
+            // The page fades in at the top, then swings down.
+            { opacity: 0, offset: 0 },
+            { opacity: 1, offset: 0.2 },
+            { opacity: 1, offset: 0.4999 },
+            { opacity: 0, offset: 0.5 },
+            { opacity: 0, offset: 1 },
+          ];
+          shadeFrames = [{ opacity: 1 }, { opacity: 0 }];
+        }
+
+        holder.appendChild(layer);
+        layer.appendChild(flipper);
+
+        const easing = "cubic-bezier(0.45, 0, 0.25, 1)";
+        const timing = { duration: FLIP_MS, easing, fill: "forwards" };
+
+        const animation = flipper.animate(
+          [{ transform: angles[0] }, { transform: angles[1] }],
+          timing,
+        );
+        const faceAnimations = [
+          flipper.querySelector(".calendar-page-front").animate(frontFrames, timing),
+          flipper.querySelector(".calendar-page-back").animate(backFrames, timing),
+          flipper.querySelector(".calendar-page-shade").animate(shadeFrames, timing),
+        ];
+
+        if (layerFrames) {
+          faceAnimations.push(layer.animate(layerFrames, timing));
+        }
+
+        const finish = () => {
+          if (!activeFlip || activeFlip.layer !== holder) return;
+
+          holder.remove();
+          activeFlip = null;
+        };
+
+        animation.onfinish = finish;
+        // Fallback in case the animation never reports finishing (hidden tab).
+        const timer = setTimeout(finish, FLIP_MS + 400);
+
+        activeFlip = { layer: holder, animation, faceAnimations, timer };
+      }
+
+      window.addEventListener("resize", endActiveFlip);
+
+      monthSwiper.on("slideChange", (swiper) => {
+        const from = swiper.previousIndex;
+        const to = swiper.activeIndex;
+
+        if (from === to || typeof from !== "number") return;
+
+        flipCalendar(swiper.slides[from], swiper.slides[to], to > from);
+      });
+
+      // The big card lists every alternate name ("a / b / c"), so each name is
+      // sized to fit inside the card: one line at up to 4vw if it fits,
+      // otherwise a smaller font wrapped onto at most two lines.
+      function fitMonthName(el) {
+        const vw = window.innerWidth / 100;
+        const maxWidth = 22 * vw;
+
+        el.style.whiteSpace = "nowrap";
+        el.style.maxWidth = "";
+        el.style.textAlign = "center";
+
+        for (let size = 4; size >= 3; size -= 0.2) {
+          el.style.fontSize = size + "vw";
+          if (el.scrollWidth <= maxWidth) return;
+        }
+
+        el.style.whiteSpace = "normal";
+        el.style.maxWidth = maxWidth + "px";
+
+        for (let size = 3; size >= 1.8; size -= 0.2) {
+          el.style.fontSize = size + "vw";
+
+          const lineHeight = parseFloat(getComputedStyle(el).lineHeight);
+          const lines = Math.round(el.getBoundingClientRect().height / lineHeight);
+
+          if (lines <= 2 && el.scrollWidth <= el.clientWidth + 1) return;
+        }
+      }
+
+      function fitMonthNames() {
+        document
+          .querySelectorAll(".month-slide-content .text")
+          .forEach(fitMonthName);
+      }
+
+      document.addEventListener("languageApplied", fitMonthNames);
+      window.addEventListener("resize", fitMonthNames);
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(fitMonthNames);
+      }
+      fitMonthNames();
+
+      // Clicking a small calendar jumps the big one to that month.
+      document
+        .querySelectorAll(".left-container .row, .right-container .row")
+        .forEach((row) => {
+          const numKey = row.querySelector(".num").getAttribute("data-lang-key");
+          const monthIndex = Number(numKey.replace("num-", "")) - 1;
+
+          row.addEventListener("click", () => {
+            monthSwiper.slideTo(monthIndex);
+          });
+        });
 
       document
         .querySelector(".month-swiper-next")
