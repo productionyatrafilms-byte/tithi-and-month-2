@@ -857,6 +857,16 @@
           });
         });
 
+      // Clicking the big calendar goes to the next month, same as the Next button.
+      monthOverlay.style.cursor = "pointer";
+      monthOverlay.addEventListener("click", () => {
+        if (monthSwiper.isEnd) {
+          window.location.href = "pranam.html";
+        } else {
+          monthSwiper.slideNext();
+        }
+      });
+
       document
         .querySelector(".month-swiper-next")
         .addEventListener("click", function () {
